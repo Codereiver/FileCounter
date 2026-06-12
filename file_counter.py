@@ -117,6 +117,7 @@ class FileCounterApp:
         self.scanner = None
         self.scan_thread = None
         self.current_root_node = None
+        self.sort_mode = tk.StringVar(value="count")  # "count" or "size"
 
         self._create_ui()
 
@@ -146,6 +147,26 @@ class FileCounterApp:
             state=tk.DISABLED
         )
         self.cancel_btn.pack(side=tk.RIGHT, padx=5)
+
+        # Sort options frame
+        sort_frame = ttk.LabelFrame(self.root, text="Sort By", padding="10")
+        sort_frame.pack(fill=tk.X, padx=10, pady=5)
+
+        ttk.Radiobutton(
+            sort_frame,
+            text="File Count",
+            variable=self.sort_mode,
+            value="count",
+            command=self.refresh_tree_sort
+        ).pack(side=tk.LEFT, padx=10)
+
+        ttk.Radiobutton(
+            sort_frame,
+            text="Volume (Size)",
+            variable=self.sort_mode,
+            value="size",
+            command=self.refresh_tree_sort
+        ).pack(side=tk.LEFT, padx=10)
 
         # Progress frame
         progress_frame = ttk.Frame(self.root, padding="10")
@@ -275,10 +296,11 @@ class FileCounterApp:
             values=(file_count_str, size_str)
         )
 
-        # Add children (sort by file count descending for easier identification of large dirs)
+        # Add children sorted by selected mode
+        sort_key = lambda x: x.file_count if self.sort_mode.get() == "count" else x.total_size
         sorted_children = sorted(
             node.children,
-            key=lambda x: x.file_count,
+            key=sort_key,
             reverse=True
         )
 
@@ -325,6 +347,15 @@ class FileCounterApp:
         """Cancel the current scan operation."""
         if self.scanner:
             self.scanner.cancel()
+
+    def refresh_tree_sort(self):
+        """Refresh the tree view with the newly selected sort order."""
+        if self.current_root_node:
+            # Clear the tree
+            for item in self.tree.get_children():
+                self.tree.delete(item)
+            # Repopulate with new sort order
+            self._add_node_to_tree("", self.current_root_node)
 
 
 def main():

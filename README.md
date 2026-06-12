@@ -11,6 +11,7 @@ FileCounter helps administrators identify directories containing large numbers a
 - **Tree View**: Expandable/collapsible directory structure
 - **File Counting**: Aggregated file counts for each directory and all subdirectories
 - **Size Calculation**: Total size aggregation with human-readable formatting (B, KB, MB, GB, TB)
+- **Flexible Sorting**: Sort directories by file count or volume (size) at any level
 - **Progress Indicator**: Real-time progress during directory scanning
 - **Hidden Files**: Includes hidden files and folders in the count
 - **Safe Scanning**: Does not follow symbolic links
@@ -39,10 +40,13 @@ python3 file_counter.py
    - Directory names (expandable/collapsible)
    - File counts (total files in directory and all subdirectories)
    - Total sizes (aggregated sizes in human-readable format)
+5. Use the "Sort By" options to change how directories are ordered:
+   - **File Count**: Sort by number of files (default)
+   - **Volume (Size)**: Sort by total size in bytes
 
-### Features
+### Additional Features
 
-- **Sorting**: Directories are automatically sorted by file count (descending) to make it easy to identify the largest directories
+- **Dynamic Sorting**: Switch between sorting modes at any time without re-scanning
 - **Cancel**: Click the "Cancel" button to stop a scan in progress
 - **Re-scan**: Select a new directory at any time to start a new scan
 
